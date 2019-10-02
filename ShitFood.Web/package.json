@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "stylelint": "stylelint \"**/*.scss\"",
+    "stylelint:fix": "stylelint \"**/*.scss\" --fix"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "sass": "^1.23.0"
-  }
+    "sass": "^1.23.0",
+    "stylelint": "^11.0.0",
+    "stylelint-order": "^3.1.1",
+    "stylelint-scss": "^3.11.1"
+  },
+  "dependencies": {}
 }
