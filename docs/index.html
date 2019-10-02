@@ -51,30 +51,37 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/leaflet.min.js"></script>
   <script>
-    var mymap = L.map('map1').setView([28.2723566, -16.6512628], 10);
+    var mymap = L.map('map1');
+
+    navigator.geolocation.watchPosition(showPosition);
+    function showPosition(position) {
+      mymap.setView([position.coords.latitude, position.coords.longitude], 18);
+
+      L.marker(
+          [
+            position.coords.latitude,
+            position.coords.longitude
+          ],
+          {
+            icon: myIcon,
+            alt: "Current marker",
+            title: "You are here",
+          }
+      ).addTo(mymap)
+          .bindPopup("You are here")
+    }
+
     var myIcon = L.icon({
       iconUrl: 'img/markers/me.svg',
       iconSize: [36, 36], // size of the icon
       iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
-      popupAnchor: [15, -3] // point from which the popup should open relative to the iconAnchor
+      popupAnchor: [18, -3] // point from which the popup should open relative to the iconAnchor
     });
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     })
         .addTo(mymap);
-
-    L.marker(
-        [
-          28.2723566,
-          -16.6512628
-        ],
-        {
-          icon: myIcon,
-          alt: "Alt",
-          title: "Name",
-        }
-    ).addTo(mymap)
-        .bindPopup("Hello")
   </script>
 </body>
 
