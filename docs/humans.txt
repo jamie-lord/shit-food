@@ -12,5 +12,5 @@
 
 # TECHNOLOGY COLOPHON
 
-    CSS3, HTML5, C#
-    Normalize.css, Azure, GitHub
+    CSS3, HTML5, C#, jQuery
+    Normalize.css, Azure, GitHub, Leaflet.js
