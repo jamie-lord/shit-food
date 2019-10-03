@@ -9,11 +9,18 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net.Http;
 using ShitFood.Api.FoodHygieneApi;
+using GoogleApi;
+using GoogleApi.Entities.Places.Search.Find.Request;
+using GoogleApi.Entities.Places.Search.Find.Response;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ShitFood.Api
 {
     public static class GetShit
     {
+        private static string _googleApiKey = Environment.GetEnvironmentVariable("GoogleApiKeyFromKeyVault");
+
         [FunctionName("GetShit")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log)
@@ -21,21 +28,57 @@ namespace ShitFood.Api
             string lat = req.Query["lat"];
             string lon = req.Query["lon"];
 
-            var establishments = await GetBadFoodHygieneRatings(lat, lon);
+            Establishment[] establishments = await GetBadFoodHygieneRatings(lat, lon);
 
-            return establishments != null ? (ActionResult)new OkObjectResult(establishments) : new BadRequestObjectResult("You must pass lat and lon parameters");
+            var results = new List<ShitDto>();
+
+            foreach (Establishment establishment in establishments)
+            {
+                var result = new ShitDto
+                {
+                    Id = Guid.NewGuid(),
+                    Lat = double.Parse(establishment.geocode.latitude),
+                    Lon = double.Parse(establishment.geocode.longitude),
+                    Name = establishment.BusinessName,
+                    FoodHygieneRating = establishment.RatingValue
+                };
+
+                var findPlaceRequest = new PlacesFindSearchRequest()
+                {
+                    Key = _googleApiKey,
+                    Input = establishment.BusinessName,
+                    Type = GoogleApi.Entities.Places.Search.Find.Request.Enums.InputType.TextQuery,
+                    Location = new GoogleApi.Entities.Common.Location
+                    {
+                        Latitude = double.Parse(establishment.geocode.latitude),
+                        Longitude = double.Parse(establishment.geocode.longitude)
+                    },
+                    Radius = 1
+                };
+                PlacesFindSearchResponse findPlaceResponse = await GooglePlaces.FindSearch.QueryAsync(findPlaceRequest);
+                if (findPlaceResponse.Status == GoogleApi.Entities.Common.Enums.Status.Ok && findPlaceResponse.Candidates.Count() == 1)
+                {
+                    result.GooglePlacesId = findPlaceResponse.Candidates.First().PlaceId;
+                }
+                else
+                {
+                    log.LogDebug(establishment.FHRSID + " " + findPlaceResponse.Status);
+                }
+
+                results.Add(result);
+            }
+
+            return establishments != null ? (ActionResult)new OkObjectResult(results) : new BadRequestObjectResult("You must pass lat and lon parameters");
         }
 
         private static async Task<Establishment[]> GetBadFoodHygieneRatings(string lat, string lon)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lon}&maxDistanceLimit=2&ratingKey=3&ratingOperatorKey=LessThanOrEqual&pageNumber=1&pageSize=250");
-            Console.WriteLine(request.RequestUri);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lon}&maxDistanceLimit=2&ratingKey=3&ratingOperatorKey=LessThanOrEqual&pageNumber=1&pageSize=25");
             request.Headers.Add("x-api-version", "2");
             try
             {
-                var response = await client.SendAsync(request);
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
                     return JsonConvert.DeserializeObject<EstablishmentsArray>(await response.Content.ReadAsStringAsync())?.Establishments;
