@@ -49,7 +49,9 @@
   <div id="map1"></div>
 
   <script src="js/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="js/leaflet.min.js"></script>
+  <script src="js/get-restaurants.min.js"></script>
   <script>
     var mymap = L.map('map1');
 
@@ -82,6 +84,8 @@
       attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     })
         .addTo(mymap);
+
+    getRestaurants();
   </script>
 </body>
 
