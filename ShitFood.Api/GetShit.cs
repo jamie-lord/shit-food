@@ -26,9 +26,9 @@ namespace ShitFood.Api
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log)
         {
             string lat = req.Query["lat"];
-            string lon = req.Query["lon"];
+            string lng = req.Query["lng"];
 
-            Establishment[] establishments = await GetBadFoodHygieneRatings(lat, lon);
+            Establishment[] establishments = await GetBadFoodHygieneRatings(lat, lng);
 
             var results = new List<ShitDto>();
 
@@ -68,13 +68,13 @@ namespace ShitFood.Api
                 results.Add(result);
             }
 
-            return establishments != null ? (ActionResult)new OkObjectResult(results) : new BadRequestObjectResult("You must pass lat and lon parameters");
+            return establishments != null ? (ActionResult)new OkObjectResult(results) : new BadRequestObjectResult("You must pass lat and lng parameters");
         }
 
-        private static async Task<Establishment[]> GetBadFoodHygieneRatings(string lat, string lon)
+        private static async Task<Establishment[]> GetBadFoodHygieneRatings(string lat, string lng)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lon}&maxDistanceLimit=2&ratingKey=3&ratingOperatorKey=LessThanOrEqual&pageNumber=1&pageSize=25");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lng}&maxDistanceLimit=2&ratingKey=3&ratingOperatorKey=LessThanOrEqual&pageNumber=1&pageSize=25");
             request.Headers.Add("x-api-version", "2");
             try
             {
