@@ -1,7 +1,7 @@
 var axios = require('axios');
 
 function getRestaurants() {
-  var myIcon = L.icon({
+  var cutleryIcon = L.icon({
     iconUrl: '../img/markers/cutlery.svg',
     iconSize: [36, 36], // size of the icon
     iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
@@ -17,7 +17,7 @@ function getRestaurants() {
                 response[i].lng
               ],
               {
-                icon: myIcon,
+                icon: cutleryIcon,
                 alt: response[i].name,
                 title: response[i].name,
               }
