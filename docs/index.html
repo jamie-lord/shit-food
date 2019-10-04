@@ -55,7 +55,7 @@
   <script>
     var mymap = L.map('map1');
 
-    navigator.geolocation.watchPosition(showPosition);
+    navigator.geolocation.getCurrentPosition(showPosition);
     function showPosition(position) {
       mymap.setView([position.coords.latitude, position.coords.longitude], 18);
 
