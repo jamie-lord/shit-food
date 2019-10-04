@@ -8,7 +8,7 @@ namespace ShitFood.Api
 
         public double Lat { get; set; }
 
-        public double Lon { get; set; }
+        public double Lng { get; set; }
 
         public string Name { get; set; }
 

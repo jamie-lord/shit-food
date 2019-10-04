@@ -38,7 +38,7 @@ namespace ShitFood.Api
                 {
                     Id = Guid.NewGuid(),
                     Lat = double.Parse(establishment.geocode.latitude),
-                    Lon = double.Parse(establishment.geocode.longitude),
+                    Lng = double.Parse(establishment.geocode.longitude),
                     Name = establishment.BusinessName,
                     FoodHygieneRating = establishment.RatingValue
                 };
