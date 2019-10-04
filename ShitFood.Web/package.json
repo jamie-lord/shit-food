@@ -28,5 +28,7 @@
     "stylelint-order": "^3.1.1",
     "stylelint-scss": "^3.11.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.19.0"
+  }
 }
