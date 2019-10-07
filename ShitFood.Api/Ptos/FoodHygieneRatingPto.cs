@@ -8,6 +8,7 @@ namespace ShitFood.Api.Ptos
     public class FoodHygieneRatingPto
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int FHRSID { get; set; }
         public Guid? PlaceId { get; set; }
         public PlacePto Place { get; set; }
@@ -32,8 +33,8 @@ namespace ShitFood.Api.Ptos
         public int? Structural { get; set; }
         public int? ConfidenceInManagement { get; set; }
         public string SchemeType { get; set; }
-        public string Longitude { get; set; }
-        public string Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public string RightToReply { get; set; }
         public double Distance { get; set; }
         public bool NewRatingPending { get; set; }

@@ -21,9 +21,7 @@ namespace ShitFood.Api.Migrations
 
             modelBuilder.Entity("ShitFood.Api.Ptos.FoodHygieneRatingPto", b =>
                 {
-                    b.Property<int>("FHRSID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("FHRSID");
 
                     b.Property<string>("AddressLine1");
 
@@ -45,7 +43,7 @@ namespace ShitFood.Api.Migrations
 
                     b.Property<int?>("Hygiene");
 
-                    b.Property<string>("Latitude");
+                    b.Property<double>("Latitude");
 
                     b.Property<string>("Link");
 
@@ -59,7 +57,7 @@ namespace ShitFood.Api.Migrations
 
                     b.Property<string>("LocalAuthorityWebSite");
 
-                    b.Property<string>("Longitude");
+                    b.Property<double>("Longitude");
 
                     b.Property<bool>("NewRatingPending");
 

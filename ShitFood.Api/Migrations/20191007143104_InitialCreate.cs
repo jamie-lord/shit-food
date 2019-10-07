@@ -1,19 +1,32 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ShitFood.Api.Migrations
 {
-    public partial class AddedFoodHygieneRating : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Place",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Lat = table.Column<double>(nullable: false),
+                    Lng = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Place", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FoodHygieneRating",
                 columns: table => new
                 {
-                    FHRSID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FHRSID = table.Column<int>(nullable: false),
+                    PlaceId = table.Column<Guid>(nullable: true),
                     LocalAuthorityBusinessID = table.Column<string>(nullable: true),
                     BusinessName = table.Column<string>(nullable: true),
                     BusinessType = table.Column<string>(nullable: true),
@@ -35,8 +48,8 @@ namespace ShitFood.Api.Migrations
                     Structural = table.Column<int>(nullable: true),
                     ConfidenceInManagement = table.Column<int>(nullable: true),
                     SchemeType = table.Column<string>(nullable: true),
-                    Longitude = table.Column<string>(nullable: true),
-                    Latitude = table.Column<string>(nullable: true),
+                    Longitude = table.Column<double>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
                     RightToReply = table.Column<string>(nullable: true),
                     Distance = table.Column<double>(nullable: false),
                     NewRatingPending = table.Column<bool>(nullable: false),
@@ -45,13 +58,29 @@ namespace ShitFood.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FoodHygieneRating", x => x.FHRSID);
+                    table.ForeignKey(
+                        name: "FK_FoodHygieneRating_Place_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Place",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FoodHygieneRating_PlaceId",
+                table: "FoodHygieneRating",
+                column: "PlaceId",
+                unique: true,
+                filter: "[PlaceId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "FoodHygieneRating");
+
+            migrationBuilder.DropTable(
+                name: "Place");
         }
     }
 }
