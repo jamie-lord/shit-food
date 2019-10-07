@@ -9,7 +9,7 @@ namespace ShitFood.Api.Ptos
     {
         [Key]
         public int FHRSID { get; set; }
-        public Guid PlaceId { get; set; }
+        public Guid? PlaceId { get; set; }
         public PlacePto Place { get; set; }
         public string LocalAuthorityBusinessID { get; set; }
         public string BusinessName { get; set; }
