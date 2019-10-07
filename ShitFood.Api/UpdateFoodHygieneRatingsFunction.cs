@@ -12,6 +12,7 @@ using System.Net.Http;
 using ShitFood.Api.Ptos;
 using System.Linq;
 using Mapster;
+using System.Collections.Generic;
 
 namespace ShitFood.Api
 {
@@ -46,37 +47,46 @@ namespace ShitFood.Api
 
             try
             {
-                Establishment[] establishments = await GetBadFoodHygieneRatings(lat, lng);
-                foreach (Establishment establishment in establishments)
+                int page = 1;
+                log.LogInformation($"Getting page {page} for {lat}, {lng}");
+                List<Establishment> establishments = await GetBadFoodHygieneRatings(lat, lng, page);
+                while (establishments != null && establishments.Count() > 0)
                 {
-                    FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Find(establishment.FHRSID);
-                    if (foodHygieneRatingPto != null)
+                    foreach (Establishment establishment in establishments)
                     {
-                        // update
-                        establishment.Adapt(foodHygieneRatingPto);
-                        _context.FoodHygieneRatings.Update(foodHygieneRatingPto);
-                    }
-                    else
-                    {
-                        // insert
-                        foodHygieneRatingPto = new FoodHygieneRatingPto();
-                        establishment.Adapt(foodHygieneRatingPto);
-                        // find generic place
-                        var place = _context.Places.FirstOrDefault(x => x.Lat == foodHygieneRatingPto.Latitude && x.Lng == foodHygieneRatingPto.Longitude && x.Name == foodHygieneRatingPto.BusinessName);
-                        if (place == null)
+                        FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Find(establishment.FHRSID);
+                        if (foodHygieneRatingPto != null)
                         {
-                            place = new PlacePto
-                            {
-                                Lat = foodHygieneRatingPto.Latitude,
-                                Lng = foodHygieneRatingPto.Longitude,
-                                Name = foodHygieneRatingPto.BusinessName,
-                                FoodHygieneRating = foodHygieneRatingPto
-                            };
-                            _context.Places.Add(place);
+                            // update
+                            log.LogInformation($"Updating {establishment.FHRSID}");
+                            establishment.Adapt(foodHygieneRatingPto);
+                            _context.FoodHygieneRatings.Update(foodHygieneRatingPto);
                         }
-                        foodHygieneRatingPto.Place = place;
-                        _context.FoodHygieneRatings.Add(foodHygieneRatingPto);
+                        else
+                        {
+                            // insert
+                            log.LogInformation($"Inserting {establishment.FHRSID}");
+                            foodHygieneRatingPto = new FoodHygieneRatingPto();
+                            establishment.Adapt(foodHygieneRatingPto);
+                            // find generic place
+                            var place = _context.Places.FirstOrDefault(x => x.Lat == foodHygieneRatingPto.Latitude && x.Lng == foodHygieneRatingPto.Longitude && x.Name == foodHygieneRatingPto.BusinessName);
+                            if (place == null)
+                            {
+                                place = new PlacePto
+                                {
+                                    Lat = foodHygieneRatingPto.Latitude,
+                                    Lng = foodHygieneRatingPto.Longitude,
+                                    Name = foodHygieneRatingPto.BusinessName,
+                                    FoodHygieneRating = foodHygieneRatingPto
+                                };
+                                _context.Places.Add(place);
+                            }
+                            foodHygieneRatingPto.Place = place;
+                            _context.FoodHygieneRatings.Add(foodHygieneRatingPto);
+                        }
                     }
+                    page++;
+                    establishments = await GetBadFoodHygieneRatings(lat, lng, page);
                 }
                 _context.SaveChanges();
             }
@@ -88,17 +98,17 @@ namespace ShitFood.Api
             return new OkResult();
         }
 
-        private async Task<Establishment[]> GetBadFoodHygieneRatings(string lat, string lng)
+        private async Task<List<Establishment>> GetBadFoodHygieneRatings(string lat, string lng, int page = 1)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lng}&ratingKey=2&ratingOperatorKey=LessThanOrEqual&pageNumber=1&pageSize=100");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ratings.food.gov.uk/Establishments?latitude={lat}&longitude={lng}&ratingKey=2&ratingOperatorKey=LessThanOrEqual&maxDistanceLimit=25&pageNumber={page}&pageSize=100");
             request.Headers.Add("x-api-version", "2");
             try
             {
                 HttpResponseMessage response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<EstablishmentsArray>(await response.Content.ReadAsStringAsync())?.Establishments;
+                    return (JsonConvert.DeserializeObject<EstablishmentsArray>(await response.Content.ReadAsStringAsync())?.Establishments).ToList();
                 }
             }
             catch (Exception ex)
