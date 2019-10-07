@@ -3,9 +3,30 @@ var axios = require('axios');
 function getRestaurants() {
   var cutleryIcon = L.icon({
     iconUrl: './img/markers/cutlery.svg',
-    iconSize: [36, 36], // size of the icon
-    iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
-    popupAnchor: [18, -3] // point from which the popup should open relative to the iconAnchor
+    iconSize: [36, 36],
+    iconAnchor: [0, 0],
+    popupAnchor: [18, -3]
+  });
+
+  var cutleryIconYellow = L.icon({
+    iconUrl: './img/markers/cutlery-yellow.svg',
+    iconSize: [36, 36],
+    iconAnchor: [0, 0],
+    popupAnchor: [18, -3]
+  });
+
+  var cutleryIconOrange = L.icon({
+    iconUrl: './img/markers/cutlery-orange.svg',
+    iconSize: [36, 36],
+    iconAnchor: [0, 0],
+    popupAnchor: [18, -3]
+  });
+
+  var cutleryIconRed = L.icon({
+    iconUrl: './img/markers/cutlery-red.svg',
+    iconSize: [36, 36],
+    iconAnchor: [0, 0],
+    popupAnchor: [18, -3]
   });
 
   axios.get('https://shitfoodapi.azurewebsites.net/api/getshit?lat=52.9548&lng=-1.1581')
@@ -17,7 +38,7 @@ function getRestaurants() {
                 response.data[i].lng
               ],
               {
-                icon: cutleryIcon,
+                icon: cutleryIconColour(response.data[i].foodHygieneRating),
                 alt: response.data[i].name,
                 title: response.data[i].name,
               }
@@ -32,4 +53,19 @@ function getRestaurants() {
       .finally(function () {
         alert('Enjoy your food')
       });
+}
+
+function cutleryIconColour(rating) {
+  if (rating === 2) {
+    return cutleryIconYellow
+  }
+  else if (rating === 1) {
+    return cutleryIconOrange
+  }
+  else if (rating === 0) {
+    return cutleryIconRed
+  }
+  else {
+    return cutleryIcon
+  }
 }
