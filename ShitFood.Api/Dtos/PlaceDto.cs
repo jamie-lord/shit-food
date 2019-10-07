@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ShitFood.Api
+namespace ShitFood.Api.Dtos
 {
-    public class ShitDto
+    public class PlaceDto
     {
         public Guid Id { get; set; }
 
@@ -14,6 +14,6 @@ namespace ShitFood.Api
 
         public string FoodHygieneRating { get; set; }
 
-        public string GooglePlacesId { get; set; }
+        public string FoodHygieneRatingUri { get; set; }
     }
 }
