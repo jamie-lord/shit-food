@@ -6,6 +6,7 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var cssPurge = require('gulp-css-purge');
 var sourcemap = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
 
 sass.compiler = require('sass');
 
@@ -20,4 +21,11 @@ function compileScss() {
       .pipe(dest('../docs/css/'));
 }
 
-exports.default = series(compileScss);
+function compileJs() {
+  return src('js/get-restaurants.js')
+      .pipe(uglify())
+      .pipe(rename("get-restaurants.min.js"))
+      .pipe(dest('../docs/js/'))
+}
+
+exports.default = series(compileScss, compileJs);
