@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -13,6 +12,7 @@ using ShitFood.Api.Ptos;
 using System.Linq;
 using Mapster;
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 
 namespace ShitFood.Api
 {
@@ -69,13 +69,15 @@ namespace ShitFood.Api
                             foodHygieneRatingPto = new FoodHygieneRatingPto();
                             establishment.Adapt(foodHygieneRatingPto);
                             // find generic place
-                            var place = _context.Places.FirstOrDefault(x => x.Lat == foodHygieneRatingPto.Latitude && x.Lng == foodHygieneRatingPto.Longitude && x.Name == foodHygieneRatingPto.BusinessName);
+                            var place = _context.Places.FirstOrDefault(x => x.Location.X == foodHygieneRatingPto.Longitude && x.Location.Y == foodHygieneRatingPto.Latitude && x.Name == foodHygieneRatingPto.BusinessName);
                             if (place == null)
                             {
                                 place = new PlacePto
                                 {
-                                    Lat = foodHygieneRatingPto.Latitude,
-                                    Lng = foodHygieneRatingPto.Longitude,
+                                    Location = new Point(foodHygieneRatingPto.Longitude, foodHygieneRatingPto.Latitude)
+                                    {
+                                        SRID = 4326
+                                    },
                                     Name = foodHygieneRatingPto.BusinessName,
                                     FoodHygieneRating = foodHygieneRatingPto
                                 };

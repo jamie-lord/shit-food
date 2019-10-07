@@ -9,7 +9,7 @@ namespace ShitFood.Api
         public ShitFoodContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ShitFoodContext>();
-            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString"));
+            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SqlConnectionString"), x => x.UseNetTopologySuite());
 
             return new ShitFoodContext(optionsBuilder.Options);
         }

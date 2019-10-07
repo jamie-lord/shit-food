@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using ShitFood.Api;
 
 namespace ShitFood.Api.Migrations
@@ -93,9 +94,7 @@ namespace ShitFood.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("Lat");
-
-                    b.Property<double>("Lng");
+                    b.Property<Point>("Location");
 
                     b.Property<string>("Name");
 

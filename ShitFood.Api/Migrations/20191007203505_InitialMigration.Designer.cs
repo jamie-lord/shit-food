@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using ShitFood.Api;
 
 namespace ShitFood.Api.Migrations
 {
     [DbContext(typeof(ShitFoodContext))]
-    [Migration("20191007143104_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20191007203505_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,9 +96,7 @@ namespace ShitFood.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("Lat");
-
-                    b.Property<double>("Lng");
+                    b.Property<Point>("Location");
 
                     b.Property<string>("Name");
 

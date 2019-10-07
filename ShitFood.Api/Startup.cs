@@ -11,7 +11,7 @@ namespace ShitFood.Api
         public override void Configure(IFunctionsHostBuilder builder)
         {
             string SqlConnection = Environment.GetEnvironmentVariable("SqlConnectionString");
-            builder.Services.AddDbContext<ShitFoodContext>(options => options.UseSqlServer(SqlConnection));
+            builder.Services.AddDbContext<ShitFoodContext>(options => options.UseSqlServer(SqlConnection, x => x.UseNetTopologySuite()));
         }
     }
 }
