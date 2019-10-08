@@ -1,92 +1,140 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Shit Food | Know what you're eating!</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="description"
+      content="An application that shows the current hygiene ratings of restaurants near you so you can make a confident decision on where to eat."
+    />
+    <meta name="keywords" content="Shit Food, Food Hygiene" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+    />
+    <meta name="author" content="Jamie Lord, Jack Domleo" />
 
-<head>
-  <meta charset="utf-8">
-  <title>Shit Food | Know what you're eating!</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="An application that shows the current hygiene ratings of restaurants near you so you can make a confident decision on where to eat.">
-  <meta name="keywords" content="Shit Food, Food Hygiene">
-  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-  <meta name="author" content="Jamie Lord, Jack Domleo">
+    <meta property="og:title" content="Shit Food | Know what you're eating!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://shitfood.wtf/" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://shitfood.wtf/img/og-image.png" />
+    <meta
+      property="og:image:url"
+      content="https://shitfood.wtf/img/og-image.png"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://shitfood.wtf/img/og-image.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Shit Food" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="Shit Food" />
+    <meta
+      property="og:description"
+      content="An application that shows the current hygiene ratings of restaurants near you so you can make a confident decision on where to eat."
+    />
 
-  <meta property="og:title" content="Shit Food | Know what you're eating!" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://shitfood.wtf/" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image" content="https://shitfood.wtf/img/og-image.png" />
-  <meta property="og:image:url" content="https://shitfood.wtf/img/og-image.png" />
-  <meta property="og:image:secure_url" content="https://shitfood.wtf/img/og-image.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:alt" content="Shit Food" />
-  <meta property="og:locale" content="en_GB" />
-  <meta property="og:site_name" content="Shit Food" />
-  <meta property="og:description" content="An application that shows the current hygiene ratings of restaurants near you so you can make a confident decision on where to eat.">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./img/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="./img/favicons/android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./img/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./img/favicons/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="./img/favicons/safari-pinned-tab.svg"
+      color="#7700ff"
+    />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <meta name="msapplication-TileColor" content="#7700ff" />
+    <meta
+      name="msapplication-TileImage"
+      content="./img/favicons/mstile-144x144.png"
+    />
+    <meta
+      name="msapplication-config"
+      content="./img/favicons/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#7700ff" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="./img/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./img/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="./img/favicons/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./img/favicons/favicon-16x16.png">
-  <link rel="manifest" href="./img/favicons/site.webmanifest">
-  <link rel="mask-icon" href="./img/favicons/safari-pinned-tab.svg" color="#7700ff">
-  <link rel="shortcut icon" href="favicon.ico">
-  <meta name="msapplication-TileColor" content="#7700ff">
-  <meta name="msapplication-TileImage" content="./img/favicons/mstile-144x144.png">
-  <meta name="msapplication-config" content="./img/favicons/browserconfig.xml">
-  <meta name="theme-color" content="#7700ff">
+    <link rel="stylesheet" href="css/normalize.min.css" />
+    <link rel="stylesheet" href="css/leaflet.min.css" />
+    <link rel="stylesheet" href="css/styles.min.css" />
+  </head>
 
-  <link rel="stylesheet" href="css/normalize.min.css">
-  <link rel="stylesheet" href="css/leaflet.min.css">
-  <link rel="stylesheet" href="css/styles.min.css">
-</head>
+  <body>
+    <!--[if IE]>
+      <p class="browser-upgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+      </p>
+    <![endif]-->
 
-<body>
-  <!--[if IE]>
-    <p class="browser-upgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
+    <div id="map1"></div>
 
-  <div id="map1"></div>
+    <script src="js/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/leaflet.min.js"></script>
+    <script src="js/get-restaurants.min.js"></script>
+    <script>
+      var mymap = L.map("map1");
 
-  <script src="js/jquery.min.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="js/leaflet.min.js"></script>
-  <script src="js/get-restaurants.min.js"></script>
-  <script>
-    var mymap = L.map('map1');
+      navigator.geolocation.getCurrentPosition(showPosition);
+      function showPosition(position) {
+        mymap.setView(
+          [position.coords.latitude, position.coords.longitude],
+          18
+        );
 
-    navigator.geolocation.getCurrentPosition(showPosition);
-    function showPosition(position) {
-      mymap.setView([position.coords.latitude, position.coords.longitude], 18);
+        L.marker([position.coords.latitude, position.coords.longitude], {
+          icon: myIcon,
+          alt: "Current marker",
+          title: "You are here"
+        })
+          .addTo(mymap)
+          .bindPopup("You are here");
 
-      L.marker(
-          [
-            position.coords.latitude,
-            position.coords.longitude
-          ],
-          {
-            icon: myIcon,
-            alt: "Current marker",
-            title: "You are here",
-          }
-      ).addTo(mymap)
-          .bindPopup("You are here")
-    }
+        getRestaurants(position.coords.latitude, position.coords.longitude);
+      }
 
-    var myIcon = L.icon({
-      iconUrl: 'img/markers/me.svg',
-      iconSize: [36, 36], // size of the icon
-      iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
-      popupAnchor: [18, -3] // point from which the popup should open relative to the iconAnchor
-    });
-    L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    })
-        .addTo(mymap);
+      var myIcon = L.icon({
+        iconUrl: "img/markers/me.svg",
+        iconSize: [36, 36], // size of the icon
+        iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
+        popupAnchor: [18, -3] // point from which the popup should open relative to the iconAnchor
+      });
 
-    getRestaurants();
-  </script>
-</body>
-
+      L.tileLayer(
+        "https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png",
+        {
+          maxZoom: 18,
+          attribution:
+            'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }
+      ).addTo(mymap);
+    </script>
+  </body>
 </html>

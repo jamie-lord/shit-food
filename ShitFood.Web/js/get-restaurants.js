@@ -1,6 +1,16 @@
-function getRestaurants() {
+function getRestaurants(lat, lng) {
+  // var uri =
+  //   "http://localhost:7071/api/getshit?lat=" +
+  //   lat +
+  //   "&lng=" +
+  //   lng;
+  var uri =
+    "https://shitfoodapi.azurewebsites.net/api/getshit?lat=" +
+    lat +
+    "&lng=" +
+    lng;
   axios
-    .get("http://localhost:7071/api/getshit?lat=52.9548&lng=-1.1581")
+    .get(uri)
     .then(function(response) {
       for (var i = 0; i < response.data.length; i++) {
         L.marker([response.data[i].lat, response.data[i].lng], {
