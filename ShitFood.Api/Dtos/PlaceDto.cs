@@ -14,6 +14,6 @@ namespace ShitFood.Api.Dtos
 
         public string FoodHygieneRating { get; set; }
 
-        public string FoodHygieneRatingUri { get; set; }
+        public int? FoodHygieneRatingId { get; set; }
     }
 }

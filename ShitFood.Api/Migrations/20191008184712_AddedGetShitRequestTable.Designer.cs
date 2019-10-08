@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using ShitFood.Api;
@@ -10,9 +11,10 @@ using ShitFood.Api;
 namespace ShitFood.Api.Migrations
 {
     [DbContext(typeof(ShitFoodContext))]
-    partial class ShitFoodContextModelSnapshot : ModelSnapshot
+    [Migration("20191008184712_AddedGetShitRequestTable")]
+    partial class AddedGetShitRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +95,6 @@ namespace ShitFood.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClientIpAddress");
 
                     b.Property<int>("Distance");
 

@@ -39,6 +39,17 @@ namespace ShitFood.Api
                 SRID = 4326
             };
 
+            var requestPto = new GetShitRequestPto
+            {
+                Requested = DateTime.Now,
+                Location = location,
+                Distance = distance,
+                ClientIpAddress = req.HttpContext.Connection.RemoteIpAddress.ToString()
+            };
+
+            _context.GetShitRequests.Add(requestPto);
+            _context.SaveChanges();
+
             PlacePto[] ptos = _context.Places.Where(x => x.Location.Distance(location) <= distance).ToArray();
 
             if (ptos.Length == 0)
@@ -63,7 +74,7 @@ namespace ShitFood.Api
                 if (foodHygieneRatingPto != null)
                 {
                     place.FoodHygieneRating = foodHygieneRatingPto.RatingValue;
-                    place.FoodHygieneRatingUri = $"https://ratings.food.gov.uk/business/en-GB/{foodHygieneRatingPto.FHRSID}";
+                    place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
                 places.Add(place);
