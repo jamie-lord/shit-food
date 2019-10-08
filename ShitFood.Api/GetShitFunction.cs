@@ -74,7 +74,7 @@ namespace ShitFood.Api
                 if (foodHygieneRatingPto != null)
                 {
                     place.FoodHygieneRating = foodHygieneRatingPto.RatingValue;
-                    place.FoodHygieneRatingUri = $"https://ratings.food.gov.uk/business/en-GB/{foodHygieneRatingPto.FHRSID}";
+                    place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
                 places.Add(place);
