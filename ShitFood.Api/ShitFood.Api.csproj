@@ -4,6 +4,10 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Migrations\20191008184123_AddedGetShitRequestTable.cs" />
+    <Compile Remove="Migrations\20191008184123_AddedGetShitRequestTable.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
   <ItemGroup>
