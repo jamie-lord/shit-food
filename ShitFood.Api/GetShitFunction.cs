@@ -15,7 +15,6 @@ namespace ShitFood.Api
 {
     public class GetShitFunction
     {
-        private static string _googleApiKey = Environment.GetEnvironmentVariable("GoogleApiKeyFromKeyVault");
         private readonly ShitFoodContext _context;
 
         public GetShitFunction(ShitFoodContext context)
