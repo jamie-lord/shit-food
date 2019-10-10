@@ -1,0 +1,20 @@
+::selection {
+  background-color: #70f;
+  color: #fff;
+  text-shadow: none;
+}
+
+*,
+*::before,
+*::after,
+html {
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  overflow: hidden;
+  width: 100vw;
+}
