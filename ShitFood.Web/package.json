@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "stylelint": "stylelint \"**/*.scss\"",
-    "stylelint:fix": "stylelint \"**/*.scss\" --fix"
+    "stylelint:fix": "stylelint \"**/*.(scss|html|css|svg)\" --fix"
   },
   "repository": {
     "type": "git",
