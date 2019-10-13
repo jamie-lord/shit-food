@@ -35,28 +35,28 @@ function cutleryIconColour(rating) {
     return L.icon({
       iconUrl: "./img/markers/cutlery-yellow.svg",
       iconSize: [36, 36],
-      iconAnchor: [-18, -18],
+      iconAnchor: [10, 10],
       popupAnchor: [34, 0]
     });
   } else if (rating === "1") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-orange.svg",
       iconSize: [36, 36],
-      iconAnchor: [-18, -18],
+      iconAnchor: [10, 10],
       popupAnchor: [34, 0]
     });
   } else if (rating === "0") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-red.svg",
       iconSize: [36, 36],
-      iconAnchor: [-18, -18],
+      iconAnchor: [10, 10],
       popupAnchor: [34, 0]
     });
   }
   return L.icon({
     iconUrl: "./img/markers/cutlery.svg",
     iconSize: [36, 36],
-    iconAnchor: [-18, -18],
+    iconAnchor: [10, 10],
     popupAnchor: [34, 0]
   });
 }
