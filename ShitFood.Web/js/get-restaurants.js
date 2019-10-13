@@ -20,7 +20,7 @@ function getRestaurants(lat, lng) {
         })
           .addTo(mymap)
           .bindPopup(
-            '<strong>' + response.data[i].name + '</strong><br>Food Hygiene Rating: ' + response.data[i].foodHygieneRating
+            '<strong>' + response.data[i].name + '</strong><br>Food Hygiene Rating: ' + '<strong>' + response.data[i].foodHygieneRating + '</strong> (' + hygieneRatingPhrase(response.data[i].foodHygieneRating) + ')'
           );
       }
       console.log(response.data);
@@ -59,4 +59,15 @@ function cutleryIconColour(rating) {
     iconAnchor: [10, 10],
     popupAnchor: [34, 0]
   });
+}
+
+function hygieneRatingPhrase(rating) {
+  switch (rating) {
+    case 2:
+      return "Improvement Necessary";
+    case 1:
+      return "Major Improvement Necessary";
+    case 0:
+      return "Urgent Improvement Necessary";
+  }
 }
