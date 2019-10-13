@@ -1,0 +1,18 @@
+.legend {
+  &--food-hygiene {
+    background-color: #fff;
+    border-radius: 10px;
+    bottom: 0;
+    height: 70px;
+    left: 0;
+    margin: 10px;
+    padding: 10px;
+    position: absolute;
+    width: 150px;
+    z-index: 500;
+
+    @media (max-width: 600px) {
+      margin-bottom: 40px;
+    }
+  }
+}
