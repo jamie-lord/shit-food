@@ -20,9 +20,7 @@ function getRestaurants(lat, lng) {
         })
           .addTo(mymap)
           .bindPopup(
-            response.data[i].name +
-              " : Food Hygiene Rating - " +
-              response.data[i].foodHygieneRating
+            '<strong>' + response.data[i].name + '</strong><br>Food Hygiene Rating: ' + response.data[i].foodHygieneRating
           );
       }
       console.log(response.data);
@@ -37,28 +35,28 @@ function cutleryIconColour(rating) {
     return L.icon({
       iconUrl: "./img/markers/cutlery-yellow.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [-18, -18],
+      popupAnchor: [34, 0]
     });
   } else if (rating === "1") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-orange.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [-18, -18],
+      popupAnchor: [34, 0]
     });
   } else if (rating === "0") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-red.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [-18, -18],
+      popupAnchor: [34, 0]
     });
   }
   return L.icon({
     iconUrl: "./img/markers/cutlery.svg",
     iconSize: [36, 36],
-    iconAnchor: [0, 0],
-    popupAnchor: [18, -3]
+    iconAnchor: [-18, -18],
+    popupAnchor: [34, 0]
   });
 }
