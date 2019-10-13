@@ -4,11 +4,14 @@
   text-shadow: none;
 }
 
-*,
-*::before,
-*::after,
 html {
   box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 body {
