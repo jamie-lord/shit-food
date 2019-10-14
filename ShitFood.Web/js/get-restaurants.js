@@ -20,9 +20,7 @@ function getRestaurants(lat, lng) {
         })
           .addTo(mymap)
           .bindPopup(
-            response.data[i].name +
-              " : Food Hygiene Rating - " +
-              response.data[i].foodHygieneRating
+            '<strong>' + response.data[i].name + '</strong><br><a href="https://ratings.food.gov.uk/business/en-GB/' + response.data[i].foodHygieneRatingId + '" target="_blank" rel="noreferrer nofollow">Food Hygiene Rating: ' + '<strong>' + response.data[i].foodHygieneRating + '</strong> (' + hygieneRatingPhrase(response.data[i].foodHygieneRating) + ')</a>'
           );
       }
       console.log(response.data);
@@ -37,28 +35,39 @@ function cutleryIconColour(rating) {
     return L.icon({
       iconUrl: "./img/markers/cutlery-yellow.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [10, 10],
+      popupAnchor: [34, 0]
     });
   } else if (rating === "1") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-orange.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [10, 10],
+      popupAnchor: [34, 0]
     });
   } else if (rating === "0") {
     return L.icon({
       iconUrl: "./img/markers/cutlery-red.svg",
       iconSize: [36, 36],
-      iconAnchor: [0, 0],
-      popupAnchor: [18, -3]
+      iconAnchor: [10, 10],
+      popupAnchor: [34, 0]
     });
   }
   return L.icon({
     iconUrl: "./img/markers/cutlery.svg",
     iconSize: [36, 36],
-    iconAnchor: [0, 0],
-    popupAnchor: [18, -3]
+    iconAnchor: [10, 10],
+    popupAnchor: [34, 0]
   });
+}
+
+function hygieneRatingPhrase(rating) {
+  switch (rating) {
+    case "2":
+      return "Improvement Necessary";
+    case "1":
+      return "Major Improvement Necessary";
+    case "0":
+      return "Urgent Improvement Necessary";
+  }
 }
