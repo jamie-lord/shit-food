@@ -63,11 +63,11 @@ function cutleryIconColour(rating) {
 
 function hygieneRatingPhrase(rating) {
   switch (rating) {
-    case 2:
+    case "2":
       return "Improvement Necessary";
-    case 1:
+    case "1":
       return "Major Improvement Necessary";
-    case 0:
+    case "0":
       return "Urgent Improvement Necessary";
   }
 }
