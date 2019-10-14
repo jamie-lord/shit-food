@@ -76,7 +76,19 @@ namespace ShitFood.Api
                     place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
-                places.Add(place);
+                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.FirstOrDefault(x => x.PlaceId == pto.Id && x.Rating < 3.5);
+
+                if (googlePlacesPto != null)
+                {
+                    place.GooglePlacesId = googlePlacesPto.Id;
+                    place.GooglePlacesRating = googlePlacesPto.Rating;
+                    place.GooglePlacesRatings = googlePlacesPto.UserRatingsTotal;
+                }
+
+                if (place.FoodHygieneRatingId != null || place.GooglePlacesId != null)
+                {
+                    places.Add(place);
+                }
             }
 
             return new OkObjectResult(places);
