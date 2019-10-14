@@ -20,7 +20,7 @@ function getRestaurants(lat, lng) {
         })
           .addTo(mymap)
           .bindPopup(
-            '<strong>' + response.data[i].name + '</strong><br>Food Hygiene Rating: ' + '<strong>' + response.data[i].foodHygieneRating + '</strong> (' + hygieneRatingPhrase(response.data[i].foodHygieneRating) + ')'
+            '<strong>' + response.data[i].name + '</strong><br><a href="https://ratings.food.gov.uk/business/en-GB/' + response.data[i].foodHygieneRatingId + '" target="_blank" rel="noreferrer nofollow">Food Hygiene Rating: ' + '<strong>' + response.data[i].foodHygieneRating + '</strong> (' + hygieneRatingPhrase(response.data[i].foodHygieneRating) + ')</a>'
           );
       }
       console.log(response.data);
