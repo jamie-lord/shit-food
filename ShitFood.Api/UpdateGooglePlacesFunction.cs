@@ -17,6 +17,9 @@ using GoogleApi.Entities.Places.Search.NearBy.Response;
 using Mapster;
 using ShitFood.Api.Ptos;
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
+using GeoCoordinatePortable;
+using System.Linq;
 
 namespace ShitFood.Api
 {
@@ -38,15 +41,44 @@ namespace ShitFood.Api
         [FunctionName("UpdateGooglePlaces")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log)
         {
-            string lat = req.Query["lat"];
-            string lng = req.Query["lng"];
+            double lat = double.Parse(req.Query["lat"]);
+            double lng = double.Parse(req.Query["lng"]);
 
-            if (string.IsNullOrWhiteSpace(lat) || string.IsNullOrWhiteSpace(lng))
+            var origin = new GeoCoordinate(lat, lng);
+            var jump = 0.0025;
+
+            // +1,-1 +1,0 +1,+1
+            //  0,-1  oo   0,+1
+            // -1,-1 -1,0 -1,+1
+
+            var surroundingArea = new List<GeoCoordinate>
             {
-                return new NotFoundResult();
+                new GeoCoordinate(origin.Latitude + jump, origin.Longitude - jump),
+                new GeoCoordinate(origin.Latitude + jump, origin.Longitude),
+                new GeoCoordinate(origin.Latitude + jump, origin.Longitude + jump),
+                new GeoCoordinate(origin.Latitude, origin.Longitude - jump),
+                origin,
+                new GeoCoordinate(origin.Latitude, origin.Longitude + jump),
+                new GeoCoordinate(origin.Latitude - jump, origin.Longitude - jump),
+                new GeoCoordinate(origin.Latitude - jump, origin.Longitude),
+                new GeoCoordinate(origin.Latitude - jump, origin.Longitude + jump)
+            };
+
+            List<GooglePlacesPto> results = new List<GooglePlacesPto>();
+
+            foreach (GeoCoordinate pos in surroundingArea)
+            {
+                List<GooglePlacesPto> places = await GetNearByPlaces(pos.Latitude, pos.Longitude);
+                foreach (GooglePlacesPto place in places)
+                {
+                    if (!results.Any(x => x.Id == place.Id))
+                    {
+                        results.Add(place);
+                    }
+                }
             }
 
-            var results = await GetNearByPlaces(double.Parse(lat), double.Parse(lng));
+            var shit = results.Where(x => x.Rating < 3.5);
 
             return new OkResult();
         }
@@ -78,11 +110,9 @@ namespace ShitFood.Api
 
                 if (!string.IsNullOrWhiteSpace(nearByResponse.NextPageToken))
                 {
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                     results.AddRange(await GetNearByPlaces(lat, lng, nearByResponse.NextPageToken));
                 }
-
-                results.RemoveAll(x => x.Rating >= 3 || x.Rating == 0);
 
                 return results;
             }
