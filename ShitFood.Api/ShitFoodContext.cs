@@ -13,6 +13,8 @@ namespace ShitFood.Api
 
         public DbSet<FoodHygieneRatingPto> FoodHygieneRatings { get; set; }
 
+        public DbSet<GooglePlacesPto> GooglePlaces { get; set; }
+
         public DbSet<GetShitRequestPto> GetShitRequests { get; set; }
     }
 }

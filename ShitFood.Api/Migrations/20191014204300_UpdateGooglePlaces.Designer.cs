@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using ShitFood.Api;
@@ -10,9 +11,10 @@ using ShitFood.Api;
 namespace ShitFood.Api.Migrations
 {
     [DbContext(typeof(ShitFoodContext))]
-    partial class ShitFoodContextModelSnapshot : ModelSnapshot
+    [Migration("20191014204300_UpdateGooglePlaces")]
+    partial class UpdateGooglePlaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,9 +131,7 @@ namespace ShitFood.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlaceId")
-                        .IsUnique()
-                        .HasFilter("[PlaceId] IS NOT NULL");
+                    b.HasIndex("PlaceId");
 
                     b.ToTable("GooglePlaces");
                 });
@@ -160,8 +160,8 @@ namespace ShitFood.Api.Migrations
             modelBuilder.Entity("ShitFood.Api.Ptos.GooglePlacesPto", b =>
                 {
                     b.HasOne("ShitFood.Api.Ptos.PlacePto", "Place")
-                        .WithOne("GooglePlaces")
-                        .HasForeignKey("ShitFood.Api.Ptos.GooglePlacesPto", "PlaceId");
+                        .WithMany()
+                        .HasForeignKey("PlaceId");
                 });
 #pragma warning restore 612, 618
         }
