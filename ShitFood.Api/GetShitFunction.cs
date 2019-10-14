@@ -76,7 +76,7 @@ namespace ShitFood.Api
                     place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
-                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.FirstOrDefault(x => x.PlaceId == pto.Id && x.Rating < 3.5);
+                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.FirstOrDefault(x => x.PlaceId == pto.Id && x.UserRatingsTotal > 0 && x.Rating < 3.5);
 
                 if (googlePlacesPto != null)
                 {
