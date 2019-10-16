@@ -68,7 +68,7 @@ namespace ShitFood.Api
                     Name = pto.Name
                 };
 
-                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.FirstOrDefault(x => x.PlaceId == pto.Id);
+                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.FirstOrDefault(x => x.PlaceId == pto.Id && (x.RatingValue == "2" || x.RatingValue == "1" || x.RatingValue == "0"));
 
                 if (foodHygieneRatingPto != null)
                 {
