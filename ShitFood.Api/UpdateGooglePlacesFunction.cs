@@ -1,14 +1,10 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using GoogleApi.Entities.Places.Search.Find.Request;
-using GoogleApi.Entities.Places.Search.Find.Response;
 using GoogleApi;
 using GoogleApi.Entities.Places.Search.NearBy.Request;
 using GoogleApi.Entities.Places.Search.Common.Enums;
@@ -23,14 +19,13 @@ using System.Linq;
 
 namespace ShitFood.Api
 {
-    public class UpdateGooglePlacesFunction
+    public class UpdateGooglePlacesFunction : UpdateSourceFunctionBase
     {
         private static string _googleApiKey = Environment.GetEnvironmentVariable("GoogleApiKeyFromKeyVault");
-        private readonly ShitFoodContext _context;
 
         public UpdateGooglePlacesFunction(ShitFoodContext context)
+            : base(context)
         {
-            _context = context;
             TypeAdapterConfig<NearByResult, GooglePlacesPto>
                 .NewConfig()
                 .Ignore(x => x.PlaceId)
@@ -83,13 +78,13 @@ namespace ShitFood.Api
 
                 foreach (NearByResult nearByResult in results)
                 {
-                    GooglePlacesPto googlePlacesPto = _context.GooglePlaces.Find(nearByResult.PlaceId);
+                    GooglePlacesPto googlePlacesPto = Context.GooglePlaces.Find(nearByResult.PlaceId);
                     if (googlePlacesPto != null)
                     {
                         // update
                         log.LogInformation($"Updating Google Places {googlePlacesPto.Id}");
                         nearByResult.Adapt(googlePlacesPto);
-                        _context.GooglePlaces.Update(googlePlacesPto);
+                        Context.GooglePlaces.Update(googlePlacesPto);
                     }
                     else
                     {
@@ -97,7 +92,7 @@ namespace ShitFood.Api
                         log.LogInformation($"Inserting new Google Places {nearByResult.PlaceId}");
                         googlePlacesPto = new GooglePlacesPto();
                         nearByResult.Adapt(googlePlacesPto);
-                        PlacePto placePto = await FindExistingPlace(log, lat, lng, googlePlacesPto.Name);
+                        PlacePto placePto = FindExistingPlace(log, lat, lng, googlePlacesPto.Name);
                         if (placePto == null)
                         {
                             placePto = new PlacePto
@@ -109,14 +104,14 @@ namespace ShitFood.Api
                                 Name = googlePlacesPto.Name,
                                 GooglePlaces = googlePlacesPto
                             };
-                            _context.Places.Add(placePto);
+                            Context.Places.Add(placePto);
                         }
                         googlePlacesPto.Place = placePto;
-                        _context.GooglePlaces.Add(googlePlacesPto);
+                        Context.GooglePlaces.Add(googlePlacesPto);
                     }
                 }
 
-                _context.SaveChanges();
+                Context.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -124,24 +119,6 @@ namespace ShitFood.Api
             }
 
             return new OkResult();
-        }
-
-        private async Task<PlacePto> FindExistingPlace(ILogger log, double lat, double lng, string name)
-        {
-            double locationMargin = 0.0001;
-            var results = _context.Places.Where(x => x.Location.X > lng - locationMargin && x.Location.X < lng + locationMargin && x.Location.Y > lat - locationMargin && x.Location.Y < lat + locationMargin && x.Name.ToLower() == name.ToLower());
-            if (results.Count() == 1)
-            {
-                log.LogInformation($"Found one existing place match for {name} at {lat},{lng}");
-                return results.First();
-            }
-            else if (results.Count() > 1)
-            {
-                log.LogWarning($"Found {results.Count()} place matches for {name} at {lat},{lng}");
-                return results.First();
-            }
-            log.LogInformation($"Found no existing places for {name} at {lat},{lng}");
-            return null;
         }
 
         private async Task<List<NearByResult>> GetNearByPlaces(double lat, double lng, string pageToken = null)

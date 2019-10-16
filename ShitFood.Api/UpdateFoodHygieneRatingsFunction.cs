@@ -16,14 +16,11 @@ using NetTopologySuite.Geometries;
 
 namespace ShitFood.Api
 {
-    public class UpdateFoodHygieneRatingsFunction
+    public class UpdateFoodHygieneRatingsFunction : UpdateSourceFunctionBase
     {
-        private readonly ShitFoodContext _context;
-
         public UpdateFoodHygieneRatingsFunction(ShitFoodContext context)
+            : base(context)
         {
-            _context = context;
-
             TypeAdapterConfig<Establishment, FoodHygieneRatingPto>
                 .NewConfig()
                 .Map(dest => dest.Hygiene, src => src.scores.Hygiene)
@@ -54,13 +51,13 @@ namespace ShitFood.Api
                 {
                     foreach (Establishment establishment in establishments)
                     {
-                        FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Find(establishment.FHRSID);
+                        FoodHygieneRatingPto foodHygieneRatingPto = Context.FoodHygieneRatings.Find(establishment.FHRSID);
                         if (foodHygieneRatingPto != null)
                         {
                             // update
                             log.LogInformation($"Updating {establishment.FHRSID}");
                             establishment.Adapt(foodHygieneRatingPto);
-                            _context.FoodHygieneRatings.Update(foodHygieneRatingPto);
+                            Context.FoodHygieneRatings.Update(foodHygieneRatingPto);
                         }
                         else
                         {
@@ -69,7 +66,7 @@ namespace ShitFood.Api
                             foodHygieneRatingPto = new FoodHygieneRatingPto();
                             establishment.Adapt(foodHygieneRatingPto);
                             // find generic place
-                            var place = _context.Places.FirstOrDefault(x => x.Location.X == foodHygieneRatingPto.Longitude && x.Location.Y == foodHygieneRatingPto.Latitude && x.Name == foodHygieneRatingPto.BusinessName);
+                            var place = FindExistingPlace(log, foodHygieneRatingPto.Latitude, foodHygieneRatingPto.Longitude, foodHygieneRatingPto.BusinessName);
                             if (place == null)
                             {
                                 place = new PlacePto
@@ -81,16 +78,16 @@ namespace ShitFood.Api
                                     Name = foodHygieneRatingPto.BusinessName,
                                     FoodHygieneRating = foodHygieneRatingPto
                                 };
-                                _context.Places.Add(place);
+                                Context.Places.Add(place);
                             }
                             foodHygieneRatingPto.Place = place;
-                            _context.FoodHygieneRatings.Add(foodHygieneRatingPto);
+                            Context.FoodHygieneRatings.Add(foodHygieneRatingPto);
                         }
                     }
                     page++;
                     establishments = await GetBadFoodHygieneRatings(lat, lng, page);
                 }
-                _context.SaveChanges();
+                Context.SaveChanges();
             }
             catch (Exception ex)
             {
