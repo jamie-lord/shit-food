@@ -15,7 +15,6 @@ namespace ShitFood.Api
 {
     public class GetShitFunction
     {
-        private static string _googleApiKey = Environment.GetEnvironmentVariable("GoogleApiKeyFromKeyVault");
         private readonly ShitFoodContext _context;
 
         public GetShitFunction(ShitFoodContext context)
@@ -69,7 +68,7 @@ namespace ShitFood.Api
                     Name = pto.Name
                 };
 
-                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.FirstOrDefault(x => x.PlaceId == pto.Id);
+                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.FirstOrDefault(x => x.PlaceId == pto.Id && (x.RatingValue == "2" || x.RatingValue == "1" || x.RatingValue == "0"));
 
                 if (foodHygieneRatingPto != null)
                 {
@@ -77,7 +76,19 @@ namespace ShitFood.Api
                     place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
-                places.Add(place);
+                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.FirstOrDefault(x => x.PlaceId == pto.Id && x.UserRatingsTotal > 0 && x.Rating < 3.5);
+
+                if (googlePlacesPto != null)
+                {
+                    place.GooglePlacesId = googlePlacesPto.Id;
+                    place.GooglePlacesRating = googlePlacesPto.Rating;
+                    place.GooglePlacesRatings = googlePlacesPto.UserRatingsTotal;
+                }
+
+                if (place.FoodHygieneRatingId != null || place.GooglePlacesId != null)
+                {
+                    places.Add(place);
+                }
             }
 
             return new OkObjectResult(places);

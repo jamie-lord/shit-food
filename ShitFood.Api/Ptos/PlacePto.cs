@@ -14,5 +14,7 @@ namespace ShitFood.Api.Ptos
         public Point Location { get; set; }
 
         public FoodHygieneRatingPto FoodHygieneRating { get; set; }
+
+        public GooglePlacesPto GooglePlaces { get; set; }
     }
 }

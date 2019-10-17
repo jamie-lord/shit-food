@@ -15,5 +15,11 @@ namespace ShitFood.Api.Dtos
         public string FoodHygieneRating { get; set; }
 
         public int? FoodHygieneRatingId { get; set; }
+
+        public string GooglePlacesId { get; set; }
+
+        public double? GooglePlacesRating { get; set; }
+
+        public int? GooglePlacesRatings { get; set; }
     }
 }
