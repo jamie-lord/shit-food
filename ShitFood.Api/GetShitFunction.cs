@@ -10,16 +10,20 @@ using NetTopologySuite.Geometries;
 using ShitFood.Api.Ptos;
 using System.Collections.Generic;
 using ShitFood.Api.Dtos;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace ShitFood.Api
 {
     public class GetShitFunction
     {
         private readonly ShitFoodContext _context;
+        private readonly IDistributedCache _cache;
 
-        public GetShitFunction(ShitFoodContext context)
+        public GetShitFunction(ShitFoodContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         [FunctionName("GetShit")]
@@ -67,34 +71,44 @@ namespace ShitFood.Api
 
             foreach (PlacePto pto in ptos)
             {
-                var place = new PlaceDto
-                {
-                    Id = pto.Id,
-                    Lat = pto.Location.Y,
-                    Lng = pto.Location.X,
-                    Name = pto.Name
-                };
+                string cachedPlace = await _cache.GetStringAsync(pto.Id.ToString());
 
-                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
-
-                if (foodHygieneRatingPto != null)
+                if (cachedPlace != null)
                 {
-                    place.FoodHygieneRating = foodHygieneRatingPto.RatingValue;
-                    place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
+                    places.Add(JsonConvert.DeserializeObject<PlaceDto>(cachedPlace));
                 }
-
-                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
-
-                if (googlePlacesPto != null)
+                else
                 {
-                    place.GooglePlacesId = googlePlacesPto.Id;
-                    place.GooglePlacesRating = googlePlacesPto.Rating;
-                    place.GooglePlacesRatings = googlePlacesPto.UserRatingsTotal;
-                }
+                    var placeDto = new PlaceDto
+                    {
+                        Id = pto.Id,
+                        Lat = pto.Location.Y,
+                        Lng = pto.Location.X,
+                        Name = pto.Name
+                    };
 
-                if (place.FoodHygieneRatingId != null || place.GooglePlacesId != null)
-                {
-                    places.Add(place);
+                    FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
+
+                    if (foodHygieneRatingPto != null)
+                    {
+                        placeDto.FoodHygieneRating = foodHygieneRatingPto.RatingValue;
+                        placeDto.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
+                    }
+
+                    GooglePlacesPto googlePlacesPto = _context.GooglePlaces.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
+
+                    if (googlePlacesPto != null)
+                    {
+                        placeDto.GooglePlacesId = googlePlacesPto.Id;
+                        placeDto.GooglePlacesRating = googlePlacesPto.Rating;
+                        placeDto.GooglePlacesRatings = googlePlacesPto.UserRatingsTotal;
+                    }
+
+                    if (placeDto.FoodHygieneRatingId != null || placeDto.GooglePlacesId != null)
+                    {
+                        await _cache.SetStringAsync(pto.Id.ToString(), JsonConvert.SerializeObject(placeDto));
+                        places.Add(placeDto);
+                    }
                 }
             }
 
