@@ -10,6 +10,11 @@ namespace ShitFood.Api
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration =Environment.GetEnvironmentVariable("RedisConnectionString");
+                options.InstanceName = "master";
+            });
             string SqlConnection = Environment.GetEnvironmentVariable("SqlConnectionString");
             builder.Services.AddDbContext<ShitFoodContext>(options => options.UseSqlServer(SqlConnection, x => x.UseNetTopologySuite()));
         }

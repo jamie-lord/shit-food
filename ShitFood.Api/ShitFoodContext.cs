@@ -9,6 +9,15 @@ namespace ShitFood.Api
             : base(options)
         { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FoodHygieneRatingPto>().HasIndex(x => x.PlaceId);
+            modelBuilder.Entity<FoodHygieneRatingPto>().HasIndex(x => x.RatingValue);
+
+            modelBuilder.Entity<GooglePlacesPto>().HasIndex(x => x.PlaceId);
+            modelBuilder.Entity<GooglePlacesPto>().HasIndex(x => x.Rating);
+        }
+
         public DbSet<PlacePto> Places { get; set; }
 
         public DbSet<FoodHygieneRatingPto> FoodHygieneRatings { get; set; }
