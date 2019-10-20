@@ -49,9 +49,16 @@ namespace ShitFood.Api
             _context.GetShitRequests.Add(requestPto);
             _context.SaveChanges();
 
-            PlacePto[] ptos = _context.Places.Where(x => x.Location.Distance(location) <= distance).ToArray();
+            IQueryable<PlacePto> ptos = _context.Places.Where(x => x.Location.Distance(location) <= distance &&
+            (x.FoodHygieneRating.RatingValue == "0" ||
+            x.FoodHygieneRating.RatingValue == "1" ||
+            x.FoodHygieneRating.RatingValue == "2" ||
+            (x.GooglePlaces.Rating > 0 &&
+            x.GooglePlaces.Rating < 3.5)))
+                .OrderBy(x => x.Location.Distance(location))
+                .Take(50);
 
-            if (ptos.Length == 0)
+            if (ptos.Count() == 0)
             {
                 return new NotFoundResult();
             }
@@ -68,7 +75,7 @@ namespace ShitFood.Api
                     Name = pto.Name
                 };
 
-                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.FirstOrDefault(x => x.PlaceId == pto.Id && (x.RatingValue == "2" || x.RatingValue == "1" || x.RatingValue == "0"));
+                FoodHygieneRatingPto foodHygieneRatingPto = _context.FoodHygieneRatings.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
 
                 if (foodHygieneRatingPto != null)
                 {
@@ -76,7 +83,7 @@ namespace ShitFood.Api
                     place.FoodHygieneRatingId = foodHygieneRatingPto.FHRSID;
                 }
 
-                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.FirstOrDefault(x => x.PlaceId == pto.Id && x.UserRatingsTotal > 0 && x.Rating < 3.5);
+                GooglePlacesPto googlePlacesPto = _context.GooglePlaces.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
 
                 if (googlePlacesPto != null)
                 {
