@@ -10,7 +10,6 @@ namespace ShitFood.Api
     {
         private readonly string _partitionKey;
         private readonly string _accountKey;
-        private readonly string _accountName;
         private readonly string _connectionString;
         private readonly string TableName;
         private CloudTableClient _client;
@@ -28,23 +27,6 @@ namespace ShitFood.Api
             }
             TableName = tableName;
             _partitionKey = partitionKey;
-        }
-
-        public AzureTableStorageCache(string accountName, string accountKey, string tableName, string partitionKey)
-            : this(tableName, partitionKey)
-        {
-            if (string.IsNullOrWhiteSpace(accountName))
-            {
-                throw new ArgumentNullException("accountName cannot be null or empty");
-            }
-            if (string.IsNullOrWhiteSpace(accountKey))
-            {
-                throw new ArgumentNullException("accountKey cannot be null or empty");
-            }
-
-            _accountName = accountName;
-            _accountKey = accountKey;
-            Connect();
         }
 
         public AzureTableStorageCache(string connectionString, string tableName, string partitionKey)
@@ -93,11 +75,6 @@ namespace ShitFood.Api
         public async Task<byte[]> GetAsync(string key, CancellationToken token = default)
         {
             var cachedItem = await RetrieveAsync(key);
-            if (cachedItem != null && cachedItem.Data != null && ShouldDelete(cachedItem))
-            {
-                await RemoveAsync(key);
-                return null;
-            }
             return cachedItem?.Data;
         }
 
@@ -108,15 +85,7 @@ namespace ShitFood.Api
 
         public async Task RefreshAsync(string key, CancellationToken token = default)
         {
-            var data = await RetrieveAsync(key);
-            if (data != null)
-            {
-                if (ShouldDelete(data))
-                {
-                    await RemoveAsync(key);
-                    return;
-                }
-            }
+            await RetrieveAsync(key);
         }
 
         private async Task<CachedItem> RetrieveAsync(string key)
@@ -125,21 +94,6 @@ namespace ShitFood.Api
             var result = await _table.ExecuteAsync(op);
             var data = result?.Result as CachedItem;
             return data;
-        }
-
-        private bool ShouldDelete(CachedItem data)
-        {
-            var currentTime = DateTimeOffset.UtcNow;
-            if (data.AbsolutExperiation != null && data.AbsolutExperiation.Value <= currentTime)
-            {
-                return true;
-            }
-            if (data.SlidingExperiation.HasValue && data.LastAccessTime.HasValue && data.LastAccessTime.Value.Add(data.SlidingExperiation.Value) < currentTime)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public void Remove(string key)
@@ -160,32 +114,7 @@ namespace ShitFood.Api
 
         public Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = default)
         {
-            DateTimeOffset? absoluteExpiration = null;
-            var currentTime = DateTimeOffset.UtcNow;
-            if (options.AbsoluteExpirationRelativeToNow.HasValue)
-            {
-                absoluteExpiration = currentTime.Add(options.AbsoluteExpirationRelativeToNow.Value);
-            }
-            else if (options.AbsoluteExpiration.HasValue)
-            {
-                if (options.AbsoluteExpiration.Value <= currentTime)
-                {
-                    throw new ArgumentOutOfRangeException(
-                       nameof(options.AbsoluteExpiration),
-                       options.AbsoluteExpiration.Value,
-                       "The absolute expiration value must be in the future.");
-                }
-                absoluteExpiration = options.AbsoluteExpiration;
-            }
-            var item = new CachedItem(_partitionKey, key, value) { LastAccessTime = currentTime };
-            if (absoluteExpiration.HasValue)
-            {
-                item.AbsolutExperiation = absoluteExpiration;
-            }
-            if (options.SlidingExpiration.HasValue)
-            {
-                item.SlidingExperiation = options.SlidingExpiration;
-            }
+            var item = new CachedItem(_partitionKey, key, value);
             var op = TableOperation.InsertOrReplace(item);
             return _table.ExecuteAsync(op);
         }

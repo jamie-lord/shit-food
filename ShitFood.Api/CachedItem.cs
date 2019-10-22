@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using System;
 
 namespace ShitFood.Api
 {
@@ -13,8 +12,5 @@ namespace ShitFood.Api
         }
 
         public byte[] Data { get; set; }
-        public TimeSpan? SlidingExperiation { get; set; }
-        public DateTimeOffset? AbsolutExperiation { get; set; }
-        public DateTimeOffset? LastAccessTime { get; set; }
     }
 }
