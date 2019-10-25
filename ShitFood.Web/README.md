@@ -1,16 +1,29 @@
-# ShitFood.Web
+# shitfood.web
 
-Compile, minify and move JS and CSS to /docs
+## Project setup
 ```
-gulp
-```
-
-Identify style linting issues
-```
-npm run stylelint
+npm install
 ```
 
-Lint and fix styling issues
+### Compiles and hot-reloads for development
 ```
-npm run stylelint:fix
+npm run serve
 ```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Run your tests
+```
+npm run test
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
