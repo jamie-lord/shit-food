@@ -1,18 +1,22 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <l-map style="width: 100vw; height: 100vh">
+      <l-tile-layer :url="'http://{s}.tile.osm.org/{z}/{x}/{y}.png'"></l-tile-layer>
+    </l-map>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import { Component, Emit, Mixins, Model, Prop, Vue } from "vue-property-decorator";
+import L from 'leaflet';
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 
-export default {
-  name: "home",
-  components: {
-    HelloWorld
+@Component({
+  components: { LMap, LTileLayer, LMarker }
+})
+export default class Home extends Vue {
+  private async created() {
+
   }
-};
+}
 </script>
