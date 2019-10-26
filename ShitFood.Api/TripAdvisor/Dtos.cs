@@ -47,7 +47,7 @@ namespace ShitFood.Api.TripAdvisor
         public bool isTravelersChoice { get; set; }
     }
 
-    public class Restaurant
+    public class Summary
     {
         public string detailPageUrl { get; set; }
         public string heroImgUrl { get; set; }
@@ -197,7 +197,7 @@ namespace ShitFood.Api.TripAdvisor
         public string updateListingUrl { get; set; }
     }
 
-    public class RestaurantDetail
+    public class Details
     {
         public string name { get; set; }
         public int detailId { get; set; }

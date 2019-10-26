@@ -16,5 +16,7 @@ namespace ShitFood.Api.Ptos
         public FoodHygieneRatingPto FoodHygieneRating { get; set; }
 
         public GooglePlacesPto GooglePlaces { get; set; }
+
+        public TripAdvisorPto TripAdvisorLocation { get; set; }
     }
 }

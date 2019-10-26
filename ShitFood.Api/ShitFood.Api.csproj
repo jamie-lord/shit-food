@@ -6,6 +6,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191008184123_AddedGetShitRequestTable.cs" />
     <Compile Remove="Migrations\20191008184123_AddedGetShitRequestTable.Designer.cs" />
+    <Compile Remove="Migrations\20191026221955_RenameDbSet.cs" />
+    <Compile Remove="Migrations\20191026221955_RenameDbSet.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
