@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ShitFood.Api.Ptos
 {
     [Table("TripAdvisor")]
-    public class TripAdvisorPto
+    public class TripAdvisorPto : DataSourceBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

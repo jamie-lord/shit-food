@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ShitFood.Api.Ptos
 {
     [Table("FoodHygieneRating")]
-    public class FoodHygieneRatingPto
+    public class FoodHygieneRatingPto : DataSourceBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
