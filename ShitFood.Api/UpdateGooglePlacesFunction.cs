@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using GeoCoordinatePortable;
 using System.Linq;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ShitFood.Api
 {
@@ -23,8 +24,8 @@ namespace ShitFood.Api
     {
         private static string _googleApiKey = Environment.GetEnvironmentVariable("GoogleApiKeyFromKeyVault");
 
-        public UpdateGooglePlacesFunction(ShitFoodContext context)
-            : base(context)
+        public UpdateGooglePlacesFunction(ShitFoodContext context, IDistributedCache cache)
+            : base(context, cache)
         {
             TypeAdapterConfig<NearByResult, GooglePlacesPto>
                 .NewConfig()
@@ -111,6 +112,8 @@ namespace ShitFood.Api
                         googlePlacesPto.Place = placePto;
                         Context.GooglePlaces.Add(googlePlacesPto);
                     }
+                    Context.SaveChanges();
+                    await RemoveCachedPlace(log, googlePlacesPto.PlaceId.ToString());
                 }
 
                 Context.SaveChanges();

@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using ShitFood.Api.TripAdvisor;
 using ShitFood.Api.Ptos;
 using NetTopologySuite.Geometries;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ShitFood.Api
 {
@@ -20,7 +21,7 @@ namespace ShitFood.Api
         private HttpClient _httpClient = new HttpClient();
         private const string JsonPattern = @"\{(?:[^\{\}]|(?<o>\{)|(?<-o>\}))+(?(o)(?!))\}";
 
-        public UpdateTripAdvisorFunction(ShitFoodContext context) : base(context)
+        public UpdateTripAdvisorFunction(ShitFoodContext context, IDistributedCache cache) : base(context, cache)
         {
         }
 
@@ -85,6 +86,7 @@ namespace ShitFood.Api
                                     Context.TripAdvisorLocations.Add(tripAdvisorPto);
                                 }
                                 Context.SaveChanges();
+                                await RemoveCachedPlace(log, tripAdvisorPto.PlaceId.ToString());
                             }
                         }
                         catch (Exception ex)
