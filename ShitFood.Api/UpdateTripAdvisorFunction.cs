@@ -52,6 +52,7 @@ namespace ShitFood.Api
                                     tripAdvisorPto.Rating = summary.averageRating;
                                     tripAdvisorPto.SummaryObject = summary;
                                     tripAdvisorPto.DetailsObject = details;
+                                    tripAdvisorPto.Updated = DateTime.Now;
                                     Context.Update(tripAdvisorPto);
                                 }
                                 else
@@ -63,7 +64,8 @@ namespace ShitFood.Api
                                         LocationId = summary.locationId,
                                         Rating = summary.averageRating,
                                         SummaryObject = summary,
-                                        DetailsObject = details
+                                        DetailsObject = details,
+                                        Updated = DateTime.Now
                                     };
                                     PlacePto placePto = FindExistingPlace(log, details.location.latitude, details.location.longitude, summary.name);
                                     if (placePto == null)

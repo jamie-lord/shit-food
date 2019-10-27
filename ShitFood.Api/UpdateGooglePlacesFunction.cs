@@ -84,6 +84,7 @@ namespace ShitFood.Api
                         // update
                         log.LogInformation($"Updating Google Places {googlePlacesPto.Id}");
                         nearByResult.Adapt(googlePlacesPto);
+                        googlePlacesPto.Updated = DateTime.Now;
                         Context.GooglePlaces.Update(googlePlacesPto);
                     }
                     else
@@ -92,6 +93,7 @@ namespace ShitFood.Api
                         log.LogInformation($"Inserting new Google Places {nearByResult.PlaceId}");
                         googlePlacesPto = new GooglePlacesPto();
                         nearByResult.Adapt(googlePlacesPto);
+                        googlePlacesPto.Updated = DateTime.Now;
                         PlacePto placePto = FindExistingPlace(log, lat, lng, googlePlacesPto.Name);
                         if (placePto == null)
                         {

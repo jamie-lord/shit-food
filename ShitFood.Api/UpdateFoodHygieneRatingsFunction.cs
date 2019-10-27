@@ -57,6 +57,7 @@ namespace ShitFood.Api
                             // update
                             log.LogInformation($"Updating {establishment.FHRSID}");
                             establishment.Adapt(foodHygieneRatingPto);
+                            foodHygieneRatingPto.Updated = DateTime.Now;
                             Context.FoodHygieneRatings.Update(foodHygieneRatingPto);
                         }
                         else
@@ -65,6 +66,7 @@ namespace ShitFood.Api
                             log.LogInformation($"Inserting {establishment.FHRSID}");
                             foodHygieneRatingPto = new FoodHygieneRatingPto();
                             establishment.Adapt(foodHygieneRatingPto);
+                            foodHygieneRatingPto.Updated = DateTime.Now;
                             // find generic place
                             var place = FindExistingPlace(log, foodHygieneRatingPto.Latitude, foodHygieneRatingPto.Longitude, foodHygieneRatingPto.BusinessName);
                             if (place == null)
