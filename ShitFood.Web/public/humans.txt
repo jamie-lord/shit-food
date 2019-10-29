@@ -12,5 +12,5 @@
 
 # TECHNOLOGY COLOPHON
 
-    CSS3, HTML5, C#, jQuery, SCSS
+    CSS3, HTML5, C#, Vue.js, TypeScript, SCSS
     Normalize.css, Azure, GitHub, GitHub Pages, Leaflet.js, Stylelint, Git
