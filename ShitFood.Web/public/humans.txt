@@ -1,0 +1,16 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Jamie Lord -- Developer -- https://lord.technology
+    Jack Domleo -- Developer -- https://jackdomleo.dev
+
+# THANKS
+
+    Jamie & Jack
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5, C#, jQuery, SCSS
+    Normalize.css, Azure, GitHub, GitHub Pages, Leaflet.js, Stylelint, Git
