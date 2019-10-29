@@ -13,13 +13,14 @@ using System.Linq;
 using Mapster;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ShitFood.Api
 {
     public class UpdateFoodHygieneRatingsFunction : UpdateSourceFunctionBase
     {
-        public UpdateFoodHygieneRatingsFunction(ShitFoodContext context)
-            : base(context)
+        public UpdateFoodHygieneRatingsFunction(ShitFoodContext context, IDistributedCache cache)
+            : base(context, cache)
         {
             TypeAdapterConfig<Establishment, FoodHygieneRatingPto>
                 .NewConfig()
@@ -57,6 +58,7 @@ namespace ShitFood.Api
                             // update
                             log.LogInformation($"Updating {establishment.FHRSID}");
                             establishment.Adapt(foodHygieneRatingPto);
+                            foodHygieneRatingPto.Updated = DateTime.Now;
                             Context.FoodHygieneRatings.Update(foodHygieneRatingPto);
                         }
                         else
@@ -65,6 +67,7 @@ namespace ShitFood.Api
                             log.LogInformation($"Inserting {establishment.FHRSID}");
                             foodHygieneRatingPto = new FoodHygieneRatingPto();
                             establishment.Adapt(foodHygieneRatingPto);
+                            foodHygieneRatingPto.Updated = DateTime.Now;
                             // find generic place
                             var place = FindExistingPlace(log, foodHygieneRatingPto.Latitude, foodHygieneRatingPto.Longitude, foodHygieneRatingPto.BusinessName);
                             if (place == null)
@@ -83,6 +86,8 @@ namespace ShitFood.Api
                             foodHygieneRatingPto.Place = place;
                             Context.FoodHygieneRatings.Add(foodHygieneRatingPto);
                         }
+                        Context.SaveChanges();
+                        await RemoveCachedPlace(log, foodHygieneRatingPto.PlaceId.ToString());
                     }
                     page++;
                     establishments = await GetBadFoodHygieneRatings(lat, lng, page);

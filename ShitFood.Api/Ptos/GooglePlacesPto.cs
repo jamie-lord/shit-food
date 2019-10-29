@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ShitFood.Api.Ptos
 {
     [Table("GooglePlaces")]
-    public class GooglePlacesPto
+    public class GooglePlacesPto : DataSourceBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

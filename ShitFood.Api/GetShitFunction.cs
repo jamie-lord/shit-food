@@ -58,7 +58,9 @@ namespace ShitFood.Api
             x.FoodHygieneRating.RatingValue == "1" ||
             x.FoodHygieneRating.RatingValue == "2" ||
             (x.GooglePlaces.Rating > 0 &&
-            x.GooglePlaces.Rating < 3.5)))
+            x.GooglePlaces.Rating < 3.5) ||
+            (x.TripAdvisorLocation.Rating > 0 &&
+            x.TripAdvisorLocation.Rating < 3.5)))
                 .OrderBy(x => x.Location.Distance(location))
                 .Take(50);
 
@@ -102,6 +104,15 @@ namespace ShitFood.Api
                         placeDto.GooglePlacesId = googlePlacesPto.Id;
                         placeDto.GooglePlacesRating = googlePlacesPto.Rating;
                         placeDto.GooglePlacesRatings = googlePlacesPto.UserRatingsTotal;
+                    }
+
+                    TripAdvisorPto tripAdvisorLocation = _context.TripAdvisorLocations.Where(x => x.PlaceId == pto.Id).SingleOrDefault();
+
+                    if (tripAdvisorLocation != null)
+                    {
+                        placeDto.TripAdvisorUrl = $"https://www.tripadvisor.co.uk{tripAdvisorLocation.SummaryObject.detailPageUrl}";
+                        placeDto.TripAdvisorRating = tripAdvisorLocation.SummaryObject.averageRating;
+                        placeDto.TripAdvosorRatings = tripAdvisorLocation.SummaryObject.userReviewCount;
                     }
 
                     if (placeDto.FoodHygieneRatingId != null || placeDto.GooglePlacesId != null)
