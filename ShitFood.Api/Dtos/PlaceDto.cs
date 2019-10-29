@@ -21,5 +21,11 @@ namespace ShitFood.Api.Dtos
         public double? GooglePlacesRating { get; set; }
 
         public int? GooglePlacesRatings { get; set; }
+
+        public string TripAdvisorUrl { get; set; }
+
+        public double? TripAdvisorRating { get; set; }
+
+        public int? TripAdvosorRatings { get; set; }
     }
 }

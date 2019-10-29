@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using ShitFood.Api;
@@ -10,9 +11,10 @@ using ShitFood.Api;
 namespace ShitFood.Api.Migrations
 {
     [DbContext(typeof(ShitFoodContext))]
-    partial class ShitFoodContextModelSnapshot : ModelSnapshot
+    [Migration("20191026221249_AddedTripAdvisor")]
+    partial class AddedTripAdvisor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,8 +82,6 @@ namespace ShitFood.Api.Migrations
 
                     b.Property<int?>("Structural");
 
-                    b.Property<DateTime?>("Updated");
-
                     b.HasKey("FHRSID");
 
                     b.HasIndex("PlaceId")
@@ -129,8 +129,6 @@ namespace ShitFood.Api.Migrations
 
                     b.Property<double>("Rating");
 
-                    b.Property<DateTime?>("Updated");
-
                     b.Property<int>("UserRatingsTotal");
 
                     b.HasKey("Id");
@@ -170,13 +168,9 @@ namespace ShitFood.Api.Migrations
 
                     b.Property<string>("Summary");
 
-                    b.Property<DateTime?>("Updated");
-
                     b.HasKey("LocationId");
 
-                    b.HasIndex("PlaceId")
-                        .IsUnique()
-                        .HasFilter("[PlaceId] IS NOT NULL");
+                    b.HasIndex("PlaceId");
 
                     b.HasIndex("Rating");
 
@@ -200,8 +194,8 @@ namespace ShitFood.Api.Migrations
             modelBuilder.Entity("ShitFood.Api.Ptos.TripAdvisorPto", b =>
                 {
                     b.HasOne("ShitFood.Api.Ptos.PlacePto", "Place")
-                        .WithOne("TripAdvisorLocation")
-                        .HasForeignKey("ShitFood.Api.Ptos.TripAdvisorPto", "PlaceId");
+                        .WithMany()
+                        .HasForeignKey("PlaceId");
                 });
 #pragma warning restore 612, 618
         }

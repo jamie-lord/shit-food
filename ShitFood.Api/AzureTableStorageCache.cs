@@ -101,10 +101,19 @@ namespace ShitFood.Api
             RemoveAsync(key).Wait();
         }
 
-        public Task RemoveAsync(string key, CancellationToken token = default)
+        public async Task RemoveAsync(string key, CancellationToken token = default)
         {
-            var op = TableOperation.Delete(new CachedItem(_partitionKey, key));
-            return _table.ExecuteAsync(op);
+            var item = new CachedItem(_partitionKey, key);
+            item.ETag = "*";
+            var op = TableOperation.Delete(item);
+            try
+            {
+                await _table.ExecuteAsync(op);
+            }
+            catch (StorageException)
+            {
+                // Object probably wasn't in cache
+            }
         }
 
         public void Set(string key, byte[] value, DistributedCacheEntryOptions options)

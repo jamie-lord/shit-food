@@ -1,16 +1,21 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using ShitFood.Api.Ptos;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShitFood.Api
 {
     public abstract class UpdateSourceFunctionBase
     {
+        private readonly IDistributedCache _cache;
+
         protected readonly ShitFoodContext Context;
 
-        public UpdateSourceFunctionBase(ShitFoodContext context)
+        public UpdateSourceFunctionBase(ShitFoodContext context, IDistributedCache cache)
         {
             Context = context;
+            _cache = cache;
         }
 
         protected PlacePto FindExistingPlace(ILogger log, double lat, double lng, string name)
@@ -29,6 +34,12 @@ namespace ShitFood.Api
             }
             log.LogInformation($"Found no existing places for {name} at {lat},{lng}");
             return null;
+        }
+
+        protected async Task RemoveCachedPlace(ILogger log, string id)
+        {
+            log.LogInformation($"Removing {id} from cache");
+            await _cache.RemoveAsync(id);
         }
     }
 }
