@@ -1,5 +1,5 @@
 module.exports = {
   lintOnSave: false,
-  publicPath: '/',
-  outputDir: '../docs'
+  publicPath: "/",
+  outputDir: "../docs"
 };

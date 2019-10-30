@@ -14,7 +14,12 @@
         alt="Current marker"
         title="This is you"
       ></l-marker>
-      <l-marker v-for="(place, index) in places" :icon="cutleryIcon" :key="index" :latLng="getPlacePosition(place)"></l-marker>
+      <l-marker
+        v-for="(place, index) in places"
+        :icon="cutleryIcon"
+        :key="index"
+        :latLng="getPlacePosition(place)"
+      ></l-marker>
     </l-map>
   </div>
 </template>
@@ -63,10 +68,14 @@ export default class Home extends Vue {
   private getRestaurants() {
     const context = this;
     navigator.geolocation.getCurrentPosition(position => {
-      const url = "https://shitfoodapi.azurewebsites.net/api/getshit?lat=" + position.coords.latitude.toString() + "&lng=" + position.coords.longitude.toString();
-      Axios.get(url).then(function (response) {
+      const url =
+        "https://shitfoodapi.azurewebsites.net/api/getshit?lat=" +
+        position.coords.latitude.toString() +
+        "&lng=" +
+        position.coords.longitude.toString();
+      Axios.get(url).then(function(response) {
         context.places = response.data as object[];
-      })
+      });
     });
   }
 
