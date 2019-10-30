@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.4d791409e6ecc4fa039a5bc952f87516.js"
+  "/precache-manifest.2c324db9c036892b9d9bb9949c7a7f22.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "shitfood.web"});
