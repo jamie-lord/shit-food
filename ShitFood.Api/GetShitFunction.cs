@@ -112,7 +112,7 @@ namespace ShitFood.Api
                     {
                         placeDto.TripAdvisorUrl = $"https://www.tripadvisor.co.uk{tripAdvisorLocation.SummaryObject.detailPageUrl}";
                         placeDto.TripAdvisorRating = tripAdvisorLocation.SummaryObject.averageRating;
-                        placeDto.TripAdvosorRatings = tripAdvisorLocation.SummaryObject.userReviewCount;
+                        placeDto.TripAdvisorRatings = tripAdvisorLocation.SummaryObject.userReviewCount;
                     }
 
                     if (placeDto.FoodHygieneRatingId != null || placeDto.GooglePlacesId != null)

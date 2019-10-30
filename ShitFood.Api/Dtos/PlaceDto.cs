@@ -26,6 +26,6 @@ namespace ShitFood.Api.Dtos
 
         public double? TripAdvisorRating { get; set; }
 
-        public int? TripAdvosorRatings { get; set; }
+        public int? TripAdvisorRatings { get; set; }
     }
 }
