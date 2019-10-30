@@ -15,9 +15,9 @@
         title="This is you"
       ></l-marker>
       <l-marker
-        v-for="(place, index) in places"
+        v-for="place in places"
         :icon="cutleryIcon"
-        :key="index"
+        :key="place.id"
         :latLng="getPlacePosition(place)"
       ></l-marker>
     </l-map>
@@ -36,6 +36,7 @@ import {
 import L from "leaflet";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 import Axios from "axios";
+import { IPlace } from "@/dtos/place";
 
 @Component({
   components: { LMap, LTileLayer, LMarker }
@@ -43,7 +44,7 @@ import Axios from "axios";
 export default class Home extends Vue {
   private myPosition: L.LatLng = new L.LatLng(0, 0);
   private zoom = 4;
-  private places: object[] = [];
+  private places: IPlace[] = [];
   private myIcon: L.Icon = new L.Icon({
     iconUrl: "img/markers/me.svg",
     iconSize: [36, 36], // size of the icon
@@ -74,7 +75,7 @@ export default class Home extends Vue {
         "&lng=" +
         position.coords.longitude.toString();
       Axios.get(url).then(function(response) {
-        context.places = response.data as object[];
+        context.places = response.data as IPlace[];
       });
     });
   }
