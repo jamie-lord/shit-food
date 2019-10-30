@@ -1,33 +1,45 @@
 {
   "name": "shitfood.web",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "stylelint": "stylelint \"**/*.scss\"",
-    "stylelint:fix": "stylelint \"**/*.(scss|html|css|svg)\" --fix"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint && npm run stylelint:fix",
+    "stylelint": "stylelint \"**/*.(scss|html|svg)\"",
+    "stylelint:fix": "stylelint \"**/*.(scss|html|svg)\" --fix"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jamie-lord/shit-food.git"
+  "dependencies": {
+    "@types/leaflet": "^1.5.5",
+    "axios": "^0.19.0",
+    "core-js": "^3.3.2",
+    "leaflet": "^1.5.1",
+    "register-service-worker": "^1.6.2",
+    "vue": "^2.6.10",
+    "vue-class-component": "^7.0.2",
+    "vue-property-decorator": "^8.3.0",
+    "vue-router": "^3.1.3",
+    "vue2-leaflet": "^2.2.1",
+    "vuex": "^3.0.1"
   },
-  "author": "Jamie Lord, Jack Domleo",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jamie-lord/shit-food/issues"
-  },
-  "homepage": "https://github.com/jamie-lord/shit-food#readme",
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.0",
-    "gulp-css-purge": "^3.0.9",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2",
-    "sass": "^1.23.0",
-    "stylelint": "^11.0.0",
+    "@vue/cli-plugin-babel": "^4.0.0",
+    "@vue/cli-plugin-eslint": "^4.0.0",
+    "@vue/cli-plugin-pwa": "^4.0.0",
+    "@vue/cli-plugin-typescript": "^4.0.0",
+    "@vue/cli-service": "^4.0.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/eslint-config-typescript": "^4.0.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.18.2",
+    "sass-loader": "^8.0.0",
+    "stylelint": "^11.1.1",
     "stylelint-order": "^3.1.1",
-    "stylelint-scss": "^3.11.1"
-  },
-  "dependencies": {}
+    "stylelint-scss": "^3.12.0",
+    "typescript": "~3.5.3",
+    "vue-template-compiler": "^2.6.10"
+  }
 }

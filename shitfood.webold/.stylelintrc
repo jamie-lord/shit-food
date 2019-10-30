@@ -29,6 +29,7 @@
     "color-named": "never",
     "function-url-no-scheme-relative": true,
     "unit-blacklist": [
+      "em",
       "pt",
       "pc",
       "cm",

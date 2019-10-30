@@ -1,0 +1,33 @@
+{
+  "name": "shitfood.web",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "stylelint": "stylelint \"**/*.scss\"",
+    "stylelint:fix": "stylelint \"**/*.(scss|html|css|svg)\" --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamie-lord/shit-food.git"
+  },
+  "author": "Jamie Lord, Jack Domleo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jamie-lord/shit-food/issues"
+  },
+  "homepage": "https://github.com/jamie-lord/shit-food#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.0",
+    "gulp-css-purge": "^3.0.9",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "sass": "^1.23.0",
+    "stylelint": "^11.0.0",
+    "stylelint-order": "^3.1.1",
+    "stylelint-scss": "^3.11.1"
+  },
+  "dependencies": {}
+}
